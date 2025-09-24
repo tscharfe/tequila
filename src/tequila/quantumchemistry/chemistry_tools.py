@@ -285,8 +285,8 @@ class ParametersQC:
     basis_set: str = None  # Quantum chemistry basis set
     geometry: str = None  # geometry of the underlying molecule,
     # this can be a filename leading to an .xyz file or the geometry given as a string
-    units:str = None # units of the geometry, if nothing is passed it will be set to Angstrom!
-    silent:bool = False
+    units: str = None  # units of the geometry, if nothing is passed it will be set to Angstrom!
+    silent: bool = False
     description: str = ""
     multiplicity: int = 1
     charge: int = 0
@@ -362,7 +362,7 @@ class ParametersQC:
             raise TequilaException(
                 "no geometry or name given to molecule\nprovide geometry=filename.xyz or geometry=`h 0.0 0.0 0.0\\n...`\nor name=whatever with file whatever.xyz being present"
             )
-        #determine units, default Angstrom
+        # determine units, default Angstrom
         if self.units is None:
             if not self.silent:
                 print("Warning: No units passed with geometry, assuming units are angstrom.")
@@ -375,7 +375,9 @@ class ParametersQC:
                 self.units = "bohr"
             else:
                 if not self.silent:
-                    print("Warning: Units passed with geometry not recognized (available units are angstrom or bohr), assuming units are angstrom.")
+                    print(
+                        "Warning: Units passed with geometry not recognized (available units are angstrom or bohr), assuming units are angstrom."
+                    )
                 self.units = "angstrom"
         # auto naming
         if self.name is None:
@@ -467,12 +469,21 @@ class ParametersQC:
                 words += [0.0] * (4 - len(words))
 
             try:
-                if initial_units==desired_units:
-                    tmp = (ParametersQC.format_element_name(words[0]), (float(words[1]), float(words[2]), float(words[3])))
-                elif initial_units=="angstrom":
-                    tmp = (ParametersQC.format_element_name(words[0]), (float(words[1])/c_bohrtoang, float(words[2])/c_bohrtoang, float(words[3])/c_bohrtoang))
-                elif initial_units=="bohr":
-                    tmp = (ParametersQC.format_element_name(words[0]), (float(words[1])*c_bohrtoang, float(words[2])*c_bohrtoang, float(words[3])*c_bohrtoang))
+                if initial_units == desired_units:
+                    tmp = (
+                        ParametersQC.format_element_name(words[0]),
+                        (float(words[1]), float(words[2]), float(words[3])),
+                    )
+                elif initial_units == "angstrom":
+                    tmp = (
+                        ParametersQC.format_element_name(words[0]),
+                        (float(words[1]) / c_bohrtoang, float(words[2]) / c_bohrtoang, float(words[3]) / c_bohrtoang),
+                    )
+                elif initial_units == "bohr":
+                    tmp = (
+                        ParametersQC.format_element_name(words[0]),
+                        (float(words[1]) * c_bohrtoang, float(words[2]) * c_bohrtoang, float(words[3]) * c_bohrtoang),
+                    )
                 result.append(tmp)
             except ValueError:
                 print("get_geometry list unknown line:\n ", line, "\n proceed with caution!")
@@ -484,11 +495,10 @@ class ParametersQC:
 
         """
         geom = self.get_geometry(desired_units=desired_units)
-        f=""
+        f = ""
         for at in geom:
             f += f"{at[0]} {at[1][0]} {at[1][1]} {at[1][2]}\n"
         return f
-
 
     def get_geometry(self, desired_units="angstrom"):
         """Returns the geometry
@@ -506,7 +516,9 @@ class ParametersQC:
             desired_units = "bohr"
         else:
             if not self.silent:
-                print("Warning: Desired units not recognized (available units are angstrom or bohr), defaulting to angstrom.")
+                print(
+                    "Warning: Desired units not recognized (available units are angstrom or bohr), defaulting to angstrom."
+                )
             desired_units = "angstrom"
 
         if self.geometry.split(".")[-1] == "xyz":
@@ -540,8 +552,7 @@ class ParametersQC:
             return coord, comment
 
     def get_xyz(self, desired_units="angstrom") -> str:
-        """Returns string for a .xyz file with the coordinates in the "desired_units"
-        """
+        """Returns string for a .xyz file with the coordinates in the "desired_units" """
         geom = self.get_geometry(desired_units=desired_units)
         f = ""
         f += f"{len(geom)}\n"
