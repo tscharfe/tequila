@@ -457,7 +457,7 @@ class ParametersQC:
             A list with the correct format for openfermion E.g return [ ('h',(0.0,0.0,0.0)), (..)], coordinates are in "desired_units",
             note that openfermion requires coordinates in angstrom
         """
-        c_bohrtoang = physical_constants["Bohr radius"][0]*10**10
+        c_bohrtoang = physical_constants["Bohr radius"][0] * 10**10
         result = []
         # Remove blank lines
         lines = [l for l in geometry.split("\n") if l]
