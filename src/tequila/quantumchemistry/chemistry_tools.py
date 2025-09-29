@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from copy import deepcopy
 from numbers import Real
 import numpy
+from scipy.constants import physical_constants
 
 from tequila import BitString, QCircuit, TequilaException, Variable, compile_circuit
 from tequila.circuit import gates
@@ -456,7 +457,7 @@ class ParametersQC:
             A list with the correct format for openfermion E.g return [ ('h',(0.0,0.0,0.0)), (..)], coordinates are in "desired_units",
             note that openfermion requires coordinates in angstrom
         """
-        c_bohrtoang = 0.52917720859
+        c_bohrtoang = physical_constants["Bohr radius"][0]*10**10
         result = []
         # Remove blank lines
         lines = [l for l in geometry.split("\n") if l]
