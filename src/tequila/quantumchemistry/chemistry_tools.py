@@ -7,7 +7,7 @@ from numbers import Real
 import numpy
 from scipy.constants import physical_constants
 
-from tequila import BitString, QCircuit, TequilaException, Variable, compile_circuit
+from tequila import BitString, QCircuit, TequilaException, TequilaWarning, Variable, compile_circuit
 from tequila.circuit import gates
 
 try:
@@ -287,7 +287,6 @@ class ParametersQC:
     geometry: str = None  # geometry of the underlying molecule,
     # this can be a filename leading to an .xyz file or the geometry given as a string
     units: str = None  # units of the geometry, if nothing is passed it will be set to Angstrom!
-    silent: bool = False
     description: str = ""
     multiplicity: int = 1
     charge: int = 0
@@ -365,8 +364,7 @@ class ParametersQC:
             )
         # determine units, default Angstrom
         if self.units is None:
-            if not self.silent:
-                print("Warning: No units passed with geometry, assuming units are angstrom.")
+            warnings.warn("Warning: No units passed with geometry, assuming units are angstrom.", TequilaWarning)
             self.units = "angstrom"
         else:
             self.units = self.units.lower()
@@ -375,10 +373,10 @@ class ParametersQC:
             elif self.units in ["bohr", "atomic units", "au", "a.u."]:
                 self.units = "bohr"
             else:
-                if not self.silent:
-                    print(
-                        "Warning: Units passed with geometry not recognized (available units are angstrom or bohr), assuming units are angstrom."
-                    )
+                warnings.warn(
+                    "Warning: Units passed with geometry not recognized (available units are angstrom or bohr), assuming units are angstrom.",
+                    TequilaWarning,
+                )
                 self.units = "angstrom"
         # auto naming
         if self.name is None:
@@ -516,10 +514,10 @@ class ParametersQC:
         elif desired_units in ["bohr", "atomic units", "au", "a.u."]:
             desired_units = "bohr"
         else:
-            if not self.silent:
-                print(
-                    "Warning: Desired units not recognized (available units are angstrom or bohr), defaulting to angstrom."
-                )
+            warnings.warn(
+                "Warning: Desired units not recognized (available units are angstrom or bohr), defaulting to angstrom.",
+                TequilaWarning,
+            )
             desired_units = "angstrom"
 
         if self.geometry.split(".")[-1] == "xyz":
